@@ -9,7 +9,7 @@ export async function deployJolieService (state, {name, author, port, desc, priv
         author: author,
         port: port,
         desc: desc,
-        public: privacy,
+        privacy: public,
         replicas: replicas,
         lang: lang,
         tags: tags
