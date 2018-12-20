@@ -1,6 +1,6 @@
 import { MICROSERVICES_API } from '../../config'
 
-export async function deployJolieService (state, {name, author, port, desc, privacy, replicas, lang, tags}) {
+export async function deployJolieService (state, {name, author, port, public, replicas, lang, tags}) {
   try {
     const options = {
       method: 'POST',
@@ -9,7 +9,7 @@ export async function deployJolieService (state, {name, author, port, desc, priv
         author: author,
         port: port,
         desc: desc,
-        privacy: public,
+        public: public,
         replicas: replicas,
         lang: lang,
         tags: tags
