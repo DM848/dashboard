@@ -15,7 +15,7 @@ export async function deployJolieService (state, {name, author, port, desc, priv
         tags: tags
       },
       headers: { 'Authorization': localStorage.getItem('id_token') },
-      url: MICROSERVICES_API + 'api/service-generator'
+      url: MICROSERVICES_API + '/api/service-generator'
     }
     let response = await this._vm.$axios(options)
     state.commit('addService', response.data.service)
@@ -27,7 +27,7 @@ export async function deployJolieService (state, {name, author, port, desc, priv
     })
     return true
   } catch (err) {
-    this._vm.$handleError(err, 'services/deployJolieService', {name: name})
+    this._vm.$handleError(err, '/services/deployJolieService', {name: name})
     return false
   }
 }
