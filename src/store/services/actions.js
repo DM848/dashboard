@@ -1,9 +1,9 @@
 import { MICROSERVICES_API } from '../../config'
 
-export async function deployJolieService (state, {name, author, port, desc, privacy, replicas, lang, tags}) {
+export async function deployNewService (state, {name, author, port, desc, privacy, replicas, lang, tags}) {
   try {
     const options = {
-      method: 'POST',
+      method: 'post',
       data: {
         name: name,
         author: author,
@@ -13,11 +13,13 @@ export async function deployJolieService (state, {name, author, port, desc, priv
         replicas: replicas,
         lang: lang,
         tags: tags
+
       },
-      headers: { 'Authorization': localStorage.getItem('id_token') },
-      url: MICROSERVICES_API + 'api/service-generator'
+      url: MICROSERVICES_API + 'api/service'
     }
     let response = await this._vm.$axios(options)
+    console.log(options)
+    console.log(response)
     state.commit('addService', response.data.service)
     this._vm.$q.notify({
       color: 'positive',
@@ -27,7 +29,8 @@ export async function deployJolieService (state, {name, author, port, desc, priv
     })
     return true
   } catch (err) {
-    this._vm.$handleError(err, 'services/deployJolieService', {name: name})
+    console.log(err)
+    this._vm.$handleError(err, 'services/deployService', {name: name})
     return false
   }
 }

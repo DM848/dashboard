@@ -77,18 +77,24 @@
     </q-table>
     <br>
     <div id="button">
-      <q-btn color="primary" icon="remove_red_eye" label="Deploy New Jolie Service" @click="deployServiceModal.show()" :loading="deployServiceLoading"/>
+      <q-btn color="primary" icon="remove_red_eye" label="Deploy New Service" @click="deployServiceModal.show()" :loading="deployServiceLoading"/>
     </div>
     <q-modal v-model="deployServiceOpened" :content-css="{padding: '50px', minWidth: '50vw'}" @keyup.enter="deployService()">
-      <div class="q-display-1 q-mb-md">Deploy a new Jolie Service!</div>
-      <q-input v-model="newServiceName" placeholder="Name of the service" />
-      <q-input v-model="description" placeholder="Description of the service" />
-      <q-input v-model="tags" placeholder="Tags" />
-      <q-option-group type="radio" v-model="privacy" :options="[{ label: 'Public', value: 'true' }, { label: 'Private', value: 'false' }]" />
+      <div class="q-display-1 q-mb-md">Deploy a new service!</div>
+      <q-input v-model="newServiceName" float-label="Name of the service" />
+      <br>
+      <q-input v-model="description" float-label="Description of the service" />
+      <br>
+      <q-input v-model="tags" float-label="Tags" placeholder="Tags" />
+      <br>
+      <q-option-group type="radio" v-model="privacy" :options="[{ label: 'Public', value: true }, { label: 'Private', value: false }]" />
+      <br>
       <q-collapsible v-model="open" label="Advanced settings">
         <div>
-          <q-input v-model="portNumber" placeholder="Port number" />
-          <q-input v-model="replicasAmount" placeholder="Amount of replicas" />
+          <q-input v-model="portNumber" float-label="Port number" type="number" />
+          <br>
+          <q-input v-model="replicasAmount" float-label="Amount of replicas" type="number" />
+          <br>
           <q-select v-model="language" float-label="Language" radio :options="[{ label: 'Jolie', value: 'jolie' }, { label: 'Go', value: 'golang' }]" />
         </div>
       </q-collapsible>
@@ -145,12 +151,19 @@ export default {
           this.stopEventListener()
         }
       },
-      newServiceName: ''
+      newServiceName: '',
+      author: localStorage.getItem('username'),
+      description: '',
+      tags: [],
+      privacy: false,
+      portNumber: 8888,
+      replicasAmount: 1,
+      language: 'jolie'
     }
   },
   methods: {
     deployService () {
-      this.$store.dispatch('services/deployJolieService', {name: this.newServiceName, author: 'author', port: this.portNumber, desc: this.description, privacy: this.privacy, replicas: this.replicasAmount, lang: this.language, tags: this.tags})
+      this.$store.dispatch('services/deployNewService', {name: this.newServiceName, author: this.author, port: this.portNumber, desc: this.description, privacy: this.privacy, replicas: this.replicasAmount, lang: this.language, tags: this.tags})
     },
     async serviceClicked (serviceId) {
       await this.$store.commit('sites/setCurrentServiceId', serviceId)

@@ -6,6 +6,6 @@ export const addService = (state, service) => {
   state.services.push(service)
 }
 
-export const getCurrentServiceId = (state, serviceId) => {
+export const setCurrentServiceId = (state, serviceId) => {
   state.currentServiceId = serviceId
 }

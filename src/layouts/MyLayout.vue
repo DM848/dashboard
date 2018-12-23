@@ -8,7 +8,6 @@
           Microservices Manager
         </q-toolbar-title>
         <q-btn flat :label="this.serviceId" icon="remove_red_eye" @click="gotoService($event)" />
-        <q-btn flat label="Service registry" icon="mdi-registered-trademark" @click="gotoService($event)" />
         <q-btn flat label="Administration" icon="mdi-bank" @click="gotoService($event)" />
         <q-btn-dropdown
           :label="this.username"
