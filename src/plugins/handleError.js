@@ -16,11 +16,11 @@ function handleError (error, action, input) {
     if (token.exp < now / 1000) {
       requestNewTokens(action, input)
     } else {
-      Notify.create({color: 'negative', icon: 'report_problem', position: 'bottom', message: 'You are not authorized to perform this action.'})
+      Notify.create({ color: 'negative', icon: 'report_problem', position: 'bottom', message: 'You are not authorized to perform this action.' })
     }
   } else {
     console.log('ERROR: ', error)
-    Notify.create({color: 'negative', icon: 'report_problem', position: 'bottom', message: error.response.data.userError})
+    Notify.create({ color: 'negative', icon: 'report_problem', position: 'bottom', message: error.response.data.userError })
   }
 }
 

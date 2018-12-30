@@ -163,7 +163,10 @@ export default {
   },
   methods: {
     deployService () {
-      this.$store.dispatch('services/deployNewService', {name: this.newServiceName, author: this.author, port: this.portNumber, desc: this.description, privacy: this.privacy, replicas: this.replicasAmount, lang: this.language, tags: this.tags})
+      this.$store.dispatch('services/deployNewService', { name: this.newServiceName, author: this.author, port: this.portNumber, desc: this.description, privacy: this.privacy, replicas: this.replicasAmount, lang: this.language, tags: this.tags })
+    },
+    fetchServices () {
+      this.$store.dispatch('services/fetchServices')
     },
     async serviceClicked (serviceId) {
       await this.$store.commit('sites/setCurrentServiceId', serviceId)
@@ -191,6 +194,7 @@ export default {
   },
   created () {
     this.$router.replace('/')
+    this.fetchServices()
   }
 }
 </script>

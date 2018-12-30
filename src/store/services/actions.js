@@ -1,6 +1,6 @@
 import { MICROSERVICES_API } from '../../config'
 
-export async function deployNewService (state, {name, author, port, desc, privacy, replicas, lang, tags}) {
+export async function deployNewService (state, { name, author, port, desc, privacy, replicas, lang, tags }) {
   try {
     const options = {
       method: 'post',
@@ -30,7 +30,23 @@ export async function deployNewService (state, {name, author, port, desc, privac
     return true
   } catch (err) {
     console.log(err)
-    this._vm.$handleError(err, 'services/deployService', {name: name})
+    this._vm.$handleError(err, 'services/deployService', { name: name })
+    return false
+  }
+}
+
+export async function fetchServices (state) {
+  try {
+    let response = await this._vm.$axios.get(MICROSERVICES_API + 'configuration')
+    console.log(response)
+    for (let i in response.data.acl_endpoints) {
+      let service = await this._vm.$axios.get(MICROSERVICES_API + 'api/' + response.data.acl_endpoints[i].service)
+      state.commit('addService', service)
+    }
+    return true
+  } catch (err) {
+    console.log(err)
+    this._vm.$handleError(err, 'services/fetchServices')
     return false
   }
 }
