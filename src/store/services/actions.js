@@ -38,11 +38,17 @@ export async function deployNewService (state, { name, author, port, desc, priva
 export async function fetchServices (state) {
   try {
     let response = await this._vm.$axios.get(MICROSERVICES_API + 'configuration')
-    console.log(response)
-    for (let i in response.data.acl_endpoints) {
-      let service = await this._vm.$axios.get(MICROSERVICES_API + 'api/' + response.data.acl_endpoints[i].service)
-      state.commit('addService', service)
+    console.log(response.data)
+    for (let i in response.data.data.acl_endpoints) {
+      try {
+        let service = await this._vm.$axios.get(MICROSERVICES_API + 'api/' + response.data.data.acl_endpoints[i].service)
+        console.log('SERVICE: ', service)
+        state.commit('addService', service)
+      } catch (err) {
+        console.log(err)
+      }
     }
+    console.log('STATE: ', state)
     return true
   } catch (err) {
     console.log(err)
