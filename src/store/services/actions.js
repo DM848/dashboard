@@ -13,7 +13,9 @@ export async function deployNewService (state, { name, author, port, desc, priva
         replicas: replicas,
         lang: lang,
         tags: tags
-
+      },
+      headers: {
+        'Authorization': localStorage.getItem('id_token')
       },
       url: MICROSERVICES_API + 'api/service'
     }
@@ -41,7 +43,14 @@ export async function fetchServices (state) {
     console.log(response.data)
     for (let i in response.data.data.acl_endpoints) {
       try {
-        let service = await this._vm.$axios.get(MICROSERVICES_API + 'api/' + response.data.data.acl_endpoints[i].service)
+        let options = {
+          method: 'post',
+          headers: {
+            'Authorization': localStorage.getItem('id_token')
+          },
+          url: MICROSERVICES_API + 'api/' + response.data.data.acl_endpoints[i].service
+        }
+        let service = await this._vm.$axios(options)
         console.log('SERVICE: ', service)
         state.commit('addService', service)
       } catch (err) {
