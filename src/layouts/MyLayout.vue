@@ -6,6 +6,9 @@
       >
         <q-toolbar-title>
           Microservices Manager
+          <span slot="subtitle">
+            Platform services
+          </span>
         </q-toolbar-title>
         <q-btn flat :label="this.serviceId" icon="remove_red_eye" @click="gotoService($event)" />
         <q-btn-dropdown

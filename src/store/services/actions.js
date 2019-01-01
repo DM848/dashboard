@@ -17,7 +17,7 @@ export async function deployNewService (state, { name, author, port, desc, priva
       headers: {
         'Authorization': localStorage.getItem('id_token')
       },
-      url: MICROSERVICES_API + 'api/service'
+      url: MICROSERVICES_API + 'api/service-generator/service'
     }
     let response = await this._vm.$axios(options)
     console.log(options)
