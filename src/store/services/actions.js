@@ -15,7 +15,7 @@ export async function deployNewService (state, { name, author, port, desc, priva
         tags: tags
       },
       headers: {
-        'Authorization': localStorage.getItem('id_token')
+        'jwt': localStorage.getItem('id_token')
       },
       url: MICROSERVICES_API + 'api/service-generator/service'
     }
@@ -44,15 +44,17 @@ export async function fetchServices (state) {
     for (let i in response.data.data.acl_endpoints) {
       try {
         let options = {
-          method: 'post',
+          method: 'get',
           headers: {
-            'Authorization': localStorage.getItem('id_token')
+            'jwt': localStorage.getItem('id_token')
           },
           url: MICROSERVICES_API + 'api/' + response.data.data.acl_endpoints[i].service
         }
         let service = await this._vm.$axios(options)
         console.log('SERVICE: ', service)
-        state.commit('addService', service)
+        if (service.status === 'success') {
+          state.commit('addService', service.data.service)
+        }
       } catch (err) {
         console.log(err)
       }
