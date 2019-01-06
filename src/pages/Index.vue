@@ -1,6 +1,8 @@
 <template>
   <q-page style="padding: 2%">
     <div>
+    <q-toggle v-model="checked" true-value="all" false-value="own" label="See all services" />
+    <br>
     <q-table
       color="primary"
       :data="services"
@@ -36,7 +38,6 @@
         <q-modal v-model="updateSiteOpened" :content-css="{padding: '50px', minWidth: '50vw'}" @show="$refs.updateSiteInput.focus()" >
           <div class="q-display-1 q-mb-md">Update Site Name</div>
           <q-input v-model="updatedSiteName" placeholder="Site Name" ref="updateSiteInput" />
-          <br>
           <div id="modal-buttons">
             <q-btn color="negative" @click="updateSiteModal.hide()" label="Cancel" icon="cancel" />
             <q-btn color="positive" @click="updateSiteName(selected[0])" label="Update" icon="done" :loading="updateSiteLoading" />
@@ -59,19 +60,19 @@
         </q-td>
         <q-td key="name" :props="props">{{ props.row.name }}
         </q-td>
-        <q-td key="author" :props="props">{{ props.row.createdBy }}
+        <q-td key="author" :props="props">{{ props.row.author }}
           <q-icon name="person" color="primary" size="22px"/>
         </q-td>
         <q-td key="createdAt" :props="props">{{ props.row.createdAt }}
           <q-icon name="date range" color="primary" size="22px"/>
         </q-td>
-        <q-td key="description" :props="props">{{ props.row.description }}
+        <q-td key="desc" :props="props">{{ props.row.desc }}
         </q-td>
         <q-td key="public" :props="props">{{ props.row.public }}
         </q-td>
         <q-td key="replicas" :props="props">{{ props.row.replicas }}
         </q-td>
-        <q-td key="language" :props="props">{{ props.row.language }}
+        <q-td key="lang" :props="props">{{ props.row.lang }}
         </q-td>
       </q-tr>
     </q-table>
@@ -127,6 +128,7 @@ export default {
       tableLoading: false,
       deployServiceLoading: false,
       filter: '',
+      checked: 'own',
       pagination: {
         rowsPerPage: 20
       },
@@ -134,10 +136,10 @@ export default {
         { name: 'name', label: 'Name', field: 'name', sortable: true },
         { name: 'author', label: 'Author', field: 'author', sortable: true },
         { name: 'createdAt', label: 'Created At', field: 'createdAt', sortable: true },
-        { name: 'description', label: 'Description', field: 'description', sortable: true },
+        { name: 'desc', label: 'Description', field: 'desc', sortable: true },
         { name: 'public', label: 'Publicity', field: 'public', sortable: true },
         { name: 'replicas', label: 'Replicas', field: 'replicas', sortable: true },
-        { name: 'language', label: 'Language', field: 'language', sortable: true }
+        { name: 'lang', label: 'Language', field: 'lang', sortable: true }
       ],
       selected: [],
       deployServiceOpened: false,
@@ -166,10 +168,10 @@ export default {
       this.$store.dispatch('services/deployNewService', { name: this.newServiceName, author: this.author, port: this.portNumber, desc: this.description, privacy: this.privacy, replicas: this.replicasAmount, lang: this.language, tags: this.tags })
     },
     fetchServices () {
-      this.$store.dispatch('services/fetchServices')
+      this.$store.dispatch('services/fetchTestServices')
     },
     async serviceClicked (serviceId) {
-      await this.$store.commit('sites/setCurrentServiceId', serviceId)
+      await this.$store.commit('services/setCurrentServiceId', serviceId)
       this.$router.push('/services/' + serviceId)
       this.$root.$emit('service_changed')
     },
@@ -189,7 +191,7 @@ export default {
   },
   computed: {
     services () {
-      return this.$store.getters['sites/getServices']
+      return this.$store.getters['services/getDashboardData'](this.checked)
     }
   },
   created () {

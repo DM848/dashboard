@@ -69,7 +69,8 @@ module.exports = function (ctx) {
         'QField',
         'QOptionGroup',
         'QCollapsible',
-        'QSelect'
+        'QSelect',
+        'QToggle'
       ],
       directives: [
         'Ripple',

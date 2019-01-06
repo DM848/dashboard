@@ -1,4 +1,4 @@
-import { MICROSERVICES_API } from '../../config'
+import { MICROSERVICES_API, DASHBOARD_TEST_CONTENT } from '../../config'
 
 export async function deployNewService (state, { name, author, port, desc, privacy, replicas, lang, tags }) {
   try {
@@ -64,6 +64,30 @@ export async function fetchServices (state) {
   } catch (err) {
     console.log(err)
     this._vm.$handleError(err, 'services/fetchServices')
+    return false
+  }
+}
+
+export async function fetchTestServices (state) {
+  try {
+    let response = await this._vm.$axios.get(DASHBOARD_TEST_CONTENT)
+    console.log(response.data)
+    for (let i in response.data.services) {
+      try {
+        if (response.data.services[i].status === 'success') {
+          state.commit('addService', response.data.services[i].data.service)
+          if (response.data.services[i].data.service.author === localStorage.getItem('username')) {
+            state.commit('addOwnService', response.data.services[i].data.service)
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    return true
+  } catch (err) {
+    console.log(err)
+    this._vm.$handleError(err, 'services/fetchTestServices')
     return false
   }
 }
